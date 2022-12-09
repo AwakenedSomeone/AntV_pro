@@ -20,13 +20,23 @@ const routes = [
     path: '/',
     component: () =>import( '@/views/home.vue'),
     redirect: {
-      name: 'global',
+      name: 'bar',
     },
     children: [
       {
-        path: '/global',
-        name: 'global',
-        component: () =>import( '@/views/global/index.vue'),
+        path: 'bar',
+        name: 'bar',
+        component: () =>import( '@/views/bar/index.vue'),
+      },
+      {
+        path: 'pie',
+        name: 'pie',
+        component: () =>import( '@/views/pie/index.vue'),
+      },
+      {
+        path: 'line',
+        name: 'line',
+        component: () =>import( '@/views/line/index.vue'),
       }
     ]
   },

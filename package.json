@@ -9,7 +9,9 @@
   },
   "dependencies": {
     "@antv/g2": "^4.1.35",
+    "@antv/g2plot": "^2.4.22",
     "ant-design-vue": "^1.7.8",
+    "big.js": "^6.2.1",
     "core-js": "^3.6.5",
     "vue": "^2.6.11",
     "vue-router": "^3.5.3"

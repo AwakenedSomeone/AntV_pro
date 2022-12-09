@@ -2,19 +2,20 @@
   <a-layout id="layout">
     <a-layout-sider v-model="collapsed" :trigger="null" collapsible>
       <div class="logo" >antV使用demo</div>
-      <a-menu theme="dark" mode="inline" :default-selected-keys="['1']">
-        <a-menu-item key="1">
-          <a-icon type="user" />
+      <a-menu theme="dark" mode="inline" v-model="current" :default-selected-keys="['bar']" @click="menuClick">
+        <a-menu-item key="bar">
+          <a-icon type="bar-chart" />
           <span>antV-g2柱状图</span>
         </a-menu-item>
-        <a-menu-item key="2">
-          <a-icon type="video-camera" />
-          <span>nav 2</span>
+        <a-menu-item key="line">
+          <a-icon type="line-chart" />
+          <span>antV-g2折线图</span>
         </a-menu-item>
-        <a-menu-item key="3">
-          <a-icon type="upload" />
-          <span>nav 3</span>
+        <a-menu-item key="pie">
+          <a-icon type="pie-chart" />
+          <span>antV-g2饼图</span>
         </a-menu-item>
+        
       </a-menu>
     </a-layout-sider>
     <a-layout>
@@ -31,8 +32,18 @@ export default {
   data() {
     return {
       collapsed: false,
+      current: ['bar']
     };
   },
+  methods: {
+    menuClick({ key}) {
+      this.$router
+        .push({
+          name: key,
+        })
+      this.current = [key]
+    }
+  }
 };
 </script>
 <style lang="less">
@@ -55,5 +66,8 @@ export default {
   height: 32px;
   margin: 16px;
   color: #fff;
+}
+.ant-menu {
+  text-align: left;
 }
 </style>

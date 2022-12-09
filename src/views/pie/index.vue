@@ -1,18 +1,12 @@
 <template>
   <div>
-    <h2>常见柱状图</h2>
-    <div class="bar-box">
+    <h2>常见饼图或环形图</h2>
+    <div class="chart-box">
       <div class="card-item">
         <div class="chart">
           <Base id="card1" />
         </div>
-        <h3 class="title">立体圆柱图</h3>
-      </div>
-      <div class="card-item">
-        <div class="chart">
-          <LineBar id="bar1" />
-        </div>
-        <h3 class="title">特殊条形图</h3>
+        <h3 class="title">自动选中的饼图</h3>
       </div>
     </div>
   </div>
@@ -20,17 +14,15 @@
 
 <script>
 import Base from './base.vue'
-import LineBar from './lineBar.vue'
 export default {
   components: {
     Base,
-    LineBar,
   }
 }
 </script>
 
 <style lang="less" scoped>
-.bar-box {
+.chart-box {
   width: calc(100vw - 250px);
   max-height: calc(100vh - 120px);
   overflow: auto;
