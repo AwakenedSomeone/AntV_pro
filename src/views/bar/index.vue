@@ -46,15 +46,41 @@
       </div>
       <div class="card-item">
         <div class="chart" style="background: linear-gradient(360deg, rgba(2, 26, 58, 0.9) 0%, rgba(8, 52, 77, 0.9) 100%);padding: 20px">
-          <IntervalChart shapeType="prism" :data="chartData"  />
+          <IntervalChart shapeType="prism2" :data="chartData" :optionsConfig="{
+            coordinate: [{
+          type: 'transpose'
+        }],
+        appendPadding: [0, 20, 0, 0],
+        label: {
+          position: 'right',
+        },
+        yAxis: {
+          label: {
+            formatter: (v) => `${v} %`
+          }
+        },
+          }"  />
         </div>
-        <h3 class="title">棱形立体图</h3>
+        <h3 class="title">棱形立体图-横向</h3>
+      </div>
+      <div class="card-item">
+        <div class="chart" style="background: linear-gradient(360deg, rgba(2, 26, 58, 0.9) 0%, rgba(8, 52, 77, 0.9) 100%);padding: 20px">
+          <IntervalChart shapeType="prism" :data="chartData"   />
+        </div>
+        <h3 class="title">棱形立体图-纵向</h3>
       </div>
       <div class="card-item">
         <div class="chart" style="background: linear-gradient(360deg, rgba(2, 26, 58, 0.9) 0%, rgba(8, 52, 77, 0.9) 100%);padding: 20px">
           <IntervalChart shapeType="bevelCuboid" :data="chartData"  />
         </div>
         <h3 class="title">斜角柱状图</h3>
+      </div>
+      <div class="card-item" >
+        <div class="chart" style="
+background: rgba(0, 19, 68, 1);padding: 20px">
+          <IntervalChart shapeType="shortLine" :data="chartData.slice(0, 3)"  />
+        </div>
+        <h3 class="title">横线柱状图</h3>
       </div>
     </div>
   </div>
@@ -78,11 +104,17 @@ export default {
     return {
       chartData: [
         { xField: '1月', yField: 56, },
-        { xField: '2月', yField: 90, },
-        { xField: '3月', yField: 25, },
+        { xField: '2月', yField: 100, },
+        { xField: '3月', yField: 0, },
         { xField: '4月', yField: 76, },
         { xField: '5月', yField: 87, },
         { xField: '6月', yField: 76, },
+        { xField: '7月', yField: 25, },
+        { xField: '8月', yField: 76, },
+        { xField: '9月', yField: 87, },
+        { xField: '10月', yField: 76, },
+        { xField: '11月', yField: 0, },
+        { xField: '12月', yField: 76, },
       ]
     }
   }

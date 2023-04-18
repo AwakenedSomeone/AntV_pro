@@ -18,22 +18,24 @@ G2.registerShape('interval', 'custom-cuboid', {
     const { y0 } = cfg
     const width = cfg.size
     const obj = this.hypotenuse(width / 2, 90)
+    const yLen1 = y > 0 ? y - obj.c : 0
+    const yLen2 = y > 0 ? y - 2*obj.c : 0
     return [
       // 右侧边
-      { x, y: y - 2 * obj.c },
+      { x, y: yLen2 },
       { x, y: y0 },
       { x: x + width / 2, y: y0 },
-      { x: x + width / 2, y: y - obj.c },
+      { x: x + width / 2, y: yLen1 },
       // 顶部
-      { x: x - width / 2, y: y - obj.c },
-      { x, y: y - 2 * obj.c },
-      { x: x + width / 2, y: y - obj.c },
+      { x: x - width / 2, y: yLen1 },
+      { x, y: yLen2 },
+      { x: x + width / 2, y: yLen1 },
       { x, y },
       // 左侧边
       { x: x - width / 2, y: y0 },
       { x, y: y0 },
-      { x, y: y - 2 * obj.c },
-      { x: x - width / 2, y: y - obj.c },
+      { x, y: yLen2 },
+      { x: x - width / 2, y: yLen1 },
     ]
   },
   // 2. 绘制
@@ -75,6 +77,109 @@ G2.registerShape('interval', 'custom-cuboid', {
         },
       },
     })
+    return group
+  },
+})
+
+// 棱柱体-横向
+G2.registerShape('interval', 'custom-cuboid2', {
+  hypotenuse(long, angle) {
+    // 获得弧度
+    const radian = ((2 * Math.PI) / 360) * angle
+    return {
+      a: Math.sin(radian) * long, // 传入斜边求邻边
+      b: Math.cos(radian) * long, // 传入斜边求对边
+      c: Math.atan(radian) * long, // 传入邻边求对边
+    }
+  },
+  // 1. 定义关键点
+  getPoints(cfg) {
+    const { x } = cfg
+    const { y } = cfg
+    const { y0 } = cfg
+    const width = cfg.size
+    const obj = this.hypotenuse(width / 2, 30)
+    const yLen1 = y > 0 ? y - obj.c : 0
+    const yLen2 = y > 0 ? y - 2*obj.c : 0
+    return [
+      // 透明占位，这样柱子方向才能正常显示,label也能正常设置位置,垂直居中
+      { x: x - width/2, y: y0},
+      { x: x + width/2, y: y0 },
+      { x: x + width / 2, y: y },
+      { x: x - width / 2, y: y  },
+      // 右侧边
+      { x , y: y0 },
+      { x: x + width / 2, y: y0 },
+      { x: x + width / 2, y: yLen1 },
+      { x, y: yLen2 },
+
+      // 顶部
+      { x: x - width / 2, y: yLen1 },
+      { x, y: yLen2 },
+      { x: x + width / 2, y: yLen1 },
+      { x, y },
+      // 左侧边
+      { x: x - width / 2, y: y0 },
+      { x, y: y0 },
+      { x, y: yLen2 },
+      { x: x - width / 2, y: yLen1 },
+    ]
+  },
+  // 2. 绘制
+  draw(cfg, container) {
+    const group = container.addGroup()
+    const points = this.parsePoints(cfg.points) // 将0-1空间的坐标转换为画布坐标
+    const result = []
+    points.forEach((item) => {
+      result.push([item.x, item.y])
+    })
+    const { 
+       rightOptions,
+      leftOptions,
+       topOptions 
+    } = cfg.customInfo.customCuboid
+    group.addShape('polygon', {
+      attrs: {
+        points: result.slice(0, 4),
+        ...cfg.defaultStyle,
+        ...cfg.style,
+        ...{
+          fill: 'transparent',
+        },
+      },
+    })
+    group.addShape('polygon', {
+      attrs: {
+        points: result.slice(4, 8),
+        ...cfg.defaultStyle,
+        ...cfg.style,
+        ...{
+          fill: getCustomFieldValue(cfg, rightOptions.fill),
+        },
+      },
+    })
+    
+    group.addShape('polygon', {
+      attrs: {
+        points: result.slice(8, 12),
+        ...cfg.defaultStyle,
+        ...cfg.style,
+        ...{
+          fill: getCustomFieldValue(cfg, topOptions.fill),
+        },
+      },
+    })
+    group.addShape('polygon', {
+      attrs: {
+        points: result.slice(12),
+        ...cfg.defaultStyle,
+        ...cfg.style,
+        ...{
+          fill: getCustomFieldValue(cfg, leftOptions.fill),
+        },
+      },
+    })
+    
     return group
   },
 })
@@ -190,8 +295,14 @@ G2.registerShape('interval', 'custom-cylinder', {
     const rectangle = points.slice(4, 8)
     const result = []
     // 每个点高度减去半径
-    rectangle.forEach((item) => {
+    rectangle.forEach((item, index) => {
+      if (index < 2) {
       result.push([item.x, item.y - ry])
+
+      } else {
+      result.push([item.x, item.y])
+
+      }
     })
     group.addShape('polygon', {
       attrs: {
@@ -203,9 +314,10 @@ G2.registerShape('interval', 'custom-cylinder', {
         },
       },
     })
-
+    
     // 底部圆
     const ellipse1 = points.slice(8, 9)
+    
     group.addShape('ellipse', {
       attrs: {
         x: ellipse1[0].x,
@@ -237,12 +349,14 @@ G2.registerShape('interval', 'custom-cylinder', {
 
     // 顶部圆
     const ellipse2 = points.slice(9)
+    console.log(ellipse1[0].y)
+    console.log(ellipse2)
     group.addShape('ellipse', {
       attrs: {
         x: ellipse2[0].x,
-        y: ellipse2[0].y - ry,
+        y: ellipse2[0].y,
         rx,
-        ry,
+        ry: ellipse2[0].y < ellipse1[0].y ? ry : 0,
         ...cfg.defaultStyle,
         ...cfg.style,
         ...{
@@ -261,6 +375,82 @@ const getCustomFieldValue = (cfg, field) => {
   }
   return field
 }
+// 柱状条顶部短横线
+G2.registerShape('interval', 'custom-short-line', {
+  // 1. 定义关键点
+  getPoints(cfg) {
+    const { x } = cfg
+    const { y } = cfg
+    const { y0 } = cfg
+  
+    const width = cfg.size
+    const halfWidth = width / 2
+    return [
+      { x: x - halfWidth, y: y0 },
+      { x: x + halfWidth, y },
+      {x: x - width, y},
+      {x: x + width, y}
+    ]
+  },
+  // 2. 绘制
+  draw(cfg, container) {
+    const group = container.addGroup()
+    const points = this.parsePoints(cfg.points) // 将0-1空间的坐标转换为画布坐标
+    const result = [
+      [points[0].x, points[0].y],
+      [points[0].x, points[1].y],
+      [points[1].x, points[1].y],
+      [points[1].x, points[0].y]
+    ]
+
+    const yLen = points[1].y < points[0].y ? points[1].y + 3 : points[1].y
+    const lines = [
+      [points[0].x, yLen],
+      [points[0].x, points[1].y ],
+      [points[1].x, points[1].y ],
+      [points[1].x, yLen]
+    ]
+    const backgroundPoints = [
+      [points[2].x, points[0].y],
+      [points[2].x, 0 + 6],
+      [points[3].x, 0 + 6],
+      [points[3].x, points[0].y]
+    ]
+    const {  barFill,lineFill, backgroundFill } = cfg.customInfo.customShortLine
+    group.addShape('polygon', {
+      attrs: {
+        points: backgroundPoints,
+        ...cfg.defaultStyle,
+        ...cfg.style,
+        ...{
+          fill: getCustomFieldValue(cfg, backgroundFill),
+        },
+      },
+    })
+    group.addShape('polygon', {
+      attrs: {
+        points: result,
+        ...cfg.defaultStyle,
+        ...cfg.style,
+        ...{
+          fill: getCustomFieldValue(cfg, barFill),
+        },
+      },
+    })
+    group.addShape('polygon', {
+      attrs: {
+        points: lines,
+        ...cfg.defaultStyle,
+        ...cfg.style,
+        ...{
+          fill: getCustomFieldValue(cfg, lineFill),
+        },
+      },
+    })
+    
+    return group
+  },
+})
 
 // 自定义marker
 G2.registerShape('point', 'custom-point', {

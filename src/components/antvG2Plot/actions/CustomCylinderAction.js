@@ -101,11 +101,15 @@ registerInteraction('custom-cylinder-interaction', {
       trigger: 'element:mouseenter',
       action: 'custom-cylinder-action:toggle',
     },
+    // {
+    //   trigger: 'element:mouseleave',
+    //   action: 'custom-cylinder-action:reset',
+    // },
   ],
-  end: [
-    {
-      trigger: 'element:mouseleave',
-      action: 'custom-cylinder-action:reset',
-    },
-  ],
+  // end: [
+  //   {
+  //     trigger: 'element:mouseleave',
+  //     action: 'custom-cylinder-action:reset',
+  //   },
+  // ],
 })

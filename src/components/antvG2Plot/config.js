@@ -31,6 +31,7 @@ export const intervalConfig = {
         fill: '#fff',
       },
     },
+    appendPadding: [20, 0, 0, 0],
     customInfo: {
       // 可以在用到的组件里自定义此字段，传不同的颜色进来
       customCuboid: {
@@ -49,6 +50,35 @@ export const intervalConfig = {
       },
     },
   },
+  prism2: {
+    shape: 'custom-cuboid2',
+    maxColumnWidth: 30,
+    label: {
+      // 可手动配置 label 数据标签位置
+      position: 'top', // 'top', 'bottom', 'middle',
+     
+      style: {
+        fill: '#fff',
+      },
+    },
+    customInfo: {
+      // 可以在用到的组件里自定义此字段，传不同的颜色进来
+      customCuboid: {
+        // 顶部颜色
+        topOptions: {
+          fill: '#46D9FA',
+        },
+        // 右侧颜色
+        rightOptions: {
+          fill: 'l(180) 0:#46D9FA 1:#455CE9',
+        },
+        // 左侧颜色
+        leftOptions: {
+          fill: 'l(180) 0:#28788A 1:#171F4E',
+        },
+      },
+    },
+  },
   // 斜角柱条
   bevelCuboid: {
     shape: 'custom-bevel-cuboid',
@@ -59,7 +89,10 @@ export const intervalConfig = {
         // 右侧颜色
         style: {
           stroke: '#88EFFF',
-          fill: 'l(90) 0:#62F7B6 1:rgba(5, 179, 230, 0)',
+          fill: (data) => {
+            console.log(data, '92')
+            return 'l(90) 0:#62F7B6 1:rgba(5, 179, 230, 0)'
+          },
         },
       },
     },
@@ -99,6 +132,28 @@ export const intervalConfig = {
     },
     interactions: [{ type: 'custom-cylinder-interaction' }],
   },
+  shortLine: {
+    shape: 'custom-short-line',
+    // maxColumnWidth: 20,
+    columnWidthRatio: 0.2,
+    label: {
+      // 可手动配置 label 数据标签位置
+      position: 'top', // 'top', 'bottom', 'middle',
+      offsetY: 5,
+      style: {
+        fill: '#fff',
+      },
+    },
+    customInfo: {
+      // 可以在用到的组件里自定义此字段，传不同的颜色进来
+      customShortLine: {
+        lineFill: 'rgba(21, 154, 255, 1)',
+        // lineFill: 'red',
+        barFill: 'l(90) 0:rgba(0, 58, 255, 0) 1:rgba(21, 154, 255, 1)',
+        backgroundFill: 'rgba(108, 128, 151, 0.1)'
+      },
+    },
+  }
 }
 
 export const lineConfig = {
